@@ -7,32 +7,30 @@ xinc = (xmax-xmin)/xnum; % Calculates length of x interval
 yinc = (ymax-ymin)/ynum; % Calculates length of y interval
 
 % Define the initial grid
-% conc = repmat(sin(2*pi*[1:xnum]/xnum).^2, ynum, 1);
- conc = (sin(pi*[1:xnum]/xnum).^2' * sin(pi*[1:ynum]/ynum).^2)+0.1*rand(xnum,ynum);
-% conc = sin(pi*[1:xnum]/xnum).^2' * sin(pi*[1:ynum]/ynum).^2;
+ conc = repmat(sin(2*pi*[1:xnum]/xnum).^2, ynum, 1)+0.1*rand(xnum,ynum);
+% conc = sin(1*pi*[1:xnum]/xnum).^2' * sin(2*pi*[1:ynum]/ynum).^2+0.1*rand(xnum,ynum);
+
 % conc = rand(xnum,ynum);
 % conc = repmat(exp([1:xnum]./xnum), ynum, 1);
 
 % Define the landscape
-
-g = 0.*repmat([1:xnum]./xnum, ynum, 1);
+g = repmat([1:xnum]./xnum, ynum, 1);
 
 % Set the value of constants
-constants = [1, -1, .5, 0, 100];
+constants = [1, 2.5, .05, 0];
 
 % Define anonymous function to be minimized
-maxfun = @(X) -sum(sum(X));
-constrfun = @(Y) constraint(Y, g, constants, xinc, yinc);
+%objfun = @(X) objfun(X);
+constrfun = @(Y) constraint(Y, g, constants, xinc, yinc, xnum, ynum);
 
 % Set the number of iterations for the optimizer
 options = optimoptions('fmincon', 'MaxFunctionEvaluations', 400000,...
     'Hessian', {'lbfgs',30}, 'TolCon', 1e-8,'TolFun',1e-8,'TolX',1e-8,...
-    'UseParallel', true);
+    'UseParallel', true, 'SpecifyObjectiveGradient',true);
+
 
 % Run optimizer using the prescribed options
-[minconc, minenergy] = fmincon(maxfun, conc,[],[],[],[],conc*0,[], constrfun, options)
-% Here the funtion minimized is the regionenergy function
-% The constraint on the solution is that it should be greater than 0
+[minconc, minenergy] = fmincon('objfun', conc,[],[],[],[],conc*0,[], constrfun, options)
 
 % Generate a plot of the concentration in the region
 subplot(2, 2, [1,2])
