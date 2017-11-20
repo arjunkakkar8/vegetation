@@ -11,7 +11,8 @@ u21 = circshift(conc, [0,1]);
 u23 = circshift(conc, [0,-1]);
 % Energy equation from the proposed model
 %e = conc.*(-c2.*((u32-u12).^2)/(4*yinc.^2)-c2.*((u23-u21).^2)/(4*xinc.^2)+c0 - c1.*conc-c3.*g);
-e = conc.*(-c2.*((u32-u12).^2)/(4*yinc.^2)-c2.*((u23-u21).^2)/(4*xinc.^2)+c0*(ynum-repmat(1:ynum, [xnum,1]))-c1*cumsum(conc, 2, 'reverse'));
-ceq = sum(sum(abs(e)));
+%ceq = conc.*(-c2.*((u32-u12).^2)/(4*yinc.^2)-c2.*((u23-u21).^2)/(4*xinc.^2)+c0*(ynum-repmat(1:ynum, [xnum,1]))-c1*cumsum(conc, 2, 'reverse'));
+ceq = conc.*(c0-c1.*conc-c2*(ynum-repmat(1:ynum, [xnum,1]))+c3*cumsum(conc, 2, 'reverse'));
+%ceq = conc.*(c0-c1.*conc);
 c =[];
 end
