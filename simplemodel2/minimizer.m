@@ -12,29 +12,26 @@ yinc = (ymax-ymin)/ynum; % Calculates length of y interval
 
 % Define the initial grid
 % conc = repmat(sin(2*pi*[1:xnum]/xnum).^2, ynum, 1)+0.1*rand(xnum,ynum);
-% conc = 0.5 * sin(1*pi*[1:xnum]/xnum).^2' * sin(3*pi*[1:ynum]/ynum).^2+0.1*rand(xnum,ynum);
-
-%conc = ones(xnum, ynum);
-
- conc = rand(xnum,ynum);
+ conc = 0.5 * sin(1*pi*[1:xnum]/xnum).^2' * sin(3*pi*[1:ynum]/ynum).^2+0.1*rand(xnum,ynum);
+% conc = ones(xnum, ynum);
+% conc = rand(xnum,ynum);
 % conc = repmat(exp([1:xnum]./xnum), ynum, 1);
 
 % Define the landscape
 g = repmat([1:xnum]./xnum, ynum, 1);
 
 % Set the value of constants
-constants = [1, 1, 1, 5];
+constants = [1, 1, 1, 3, 3];
 
 % Define anonymous function to be minimized
 %objfun = @(X) objfun(X);
-constrfun = @(Y) constraint(Y, g, constants, xinc, yinc, xnum, ynum);
+constrfun = @(Y) constraint(Y, constants, xinc, yinc, xnum, ynum);
 
 % Set the number of iterations for the optimizer
 options = optimoptions('fmincon', 'MaxFunctionEvaluations', 300000,...
-    'Hessian', {'lbfgs',30}, 'TolCon', 1e-8,'TolFun',1e-8,'TolX',1e-8,...
     'UseParallel', true, 'SpecifyObjectiveGradient',true,...
     'Display', 'iter', 'Algorithm', 'sqp',...
-    'OutputFcn', @outfun);
+    'HonorBounds', true, 'OutputFcn', @outfun);
 
 
 
@@ -56,7 +53,7 @@ subplot(2, 2, 4)
 
     function stop = outfun(x,optimValues,state)
         stop = false;
-        process = [process; x];
+        %process = [process; x];
     end
 
 end
