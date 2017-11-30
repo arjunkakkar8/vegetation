@@ -12,6 +12,7 @@ yinc = (ymax-ymin)/ynum; % Calculates length of y interval
 
 % Define the initial grid
 % conc = repmat(sin(2*pi*[1:xnum]/xnum).^2, ynum, 1)+0.1*rand(xnum,ynum);
+
 % conc =  sin(1*pi*[1:xnum]/xnum).^2' * sin(3*pi*[1:ynum]/ynum).^2+0.1*rand(xnum,ynum);
 conc =  sin(2*pi*[1:xnum]/xnum).^8' * sin(1*pi*[1:ynum]/ynum).^8+0.1*rand(xnum,ynum);
 % conc = ones(xnum, ynum);
