@@ -2,20 +2,19 @@
 % address in the Github folder.
 addpath('/Users/ak23/vegetation/genetic')
 % addAttachedFiles(gcp, {'geneticMSE.m'});
-SIZE = [10, 10];
+SIZE = [25, 25];
 NIND=70;        % Gives the population size
 MAXGEN=10000;     % Gives the number of generations
 NVAR=SIZE(1).*SIZE(2);% Number of variables
-GGAP=0.9;
-PRECI = 5;
+GGAP=1;
+PRECI = 16;
 
 CONSTANTS = [1, 1, 1, 3, 3];
 
 FieldD = repmat([PRECI;0;1;1;0;1;1], [1,NVAR]);
 
 % Initial binary population
-%Chrom = crtbp(NIND, NVAR*PRECI);
-Chrom = zeros(70,500);
+% Chrom = crtbp(NIND, NVAR*PRECI);
 
 % Initialize generations
 gen = 0;
@@ -30,9 +29,9 @@ while gen < MAXGEN
     
     SelCh = select('sus', Chrom, FitnV, GGAP);
     
-    SelCh = recombin('xovdp', SelCh, 0.7);
+    SelCh = recombin('xovdp', SelCh, 1);
     
-    SelCh = mut(SelCh);
+    SelCh = mut(SelCh,0.00005);
     
     ObjVSel = objfun(bs2rv(SelCh, FieldD), SIZE, CONSTANTS);
     
@@ -42,17 +41,7 @@ while gen < MAXGEN
     disp(gen)
     disp(min(ObjV))
     
-    % Final Points from population
-    %     points = find(Chrom(1,:));
-    %     showpoints = zeros(size(IMG));
-    %     showpoints(points) = 1;
-    %     subplot(1, 3, 1)
-    %     imshow(showpoints);
-    %     subplot(1, 3, 2)
-    %     imshow(mat2gray(IMG))
-    %     subplot(1, 3, 3)
-    %     imshow(mat2gray(reimg))
-    contour(reshape(bs2rv(Chrom(1,:), FieldD), 10, 10))
+    contour(reshape(bs2rv(Chrom(1,:), FieldD), SIZE(1), SIZE(2)))
     drawnow
 end
 

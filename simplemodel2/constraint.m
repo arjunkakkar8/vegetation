@@ -11,15 +11,13 @@ p = c3.*conc;
 %water = max(w - p + max(cumsum(w-p, 2,'reverse'),0),0);
 water = cumsum(w-p, 2,'reverse');
 % Calculate the gradient sq of water availability (the root system)
-%waterp = padarray(water, [1,1], 'replicate', 'both');
+% waterp = padarray(water, [1,1], 'replicate', 'both');
 waterp = zeros(xnum+2, ynum+2);
 waterp(2:end-1, 2:end-1) = water;
 waterp(1,:) = waterp(2,:);
 waterp(end,:) = waterp(end-1,:);
 waterp(:,1) = waterp(:,2);
 waterp(:,end) = waterp(:,end-1);
-
-
 w12 = circshift(waterp, [1,0]);
 w32 = circshift(waterp, [-1,0]);
 w21 = circshift(waterp, [0,1]);
