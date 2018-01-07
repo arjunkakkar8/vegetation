@@ -3,9 +3,9 @@ function[minconc, minenergy, process] = minimizer(a)
 process = [];
 
 %Define some parameters
-xmin=0; xmax=30;   % Determines the x limits of the region
-ymin=0; ymax=30;   % Determines the y limits of the region
-xnum=4; ynum=30; % Determines the amount of refinement required
+xmin=0; xmax=100;   % Determines the x limits of the region
+ymin=0; ymax=100;   % Determines the y limits of the region
+xnum=10; ynum=10; % Determines the amount of refinement required
 
 xinc = (xmax-xmin)/xnum; % Calculates length of x interval
 yinc = (ymax-ymin)/ynum; % Calculates length of y interval
@@ -26,8 +26,8 @@ yinc = (ymax-ymin)/ynum; % Calculates length of y interval
 g = repmat([1:ynum]./ynum, xnum, 1);
 
 % Set the value of constants
-constants = [3, 1, 1, 6, 5];
-
+%constants = [3, 1, 1, 6, 5];
+constants = [1, 1, 0.5, 3, 1];
 % Define anonymous function to be minimized
 %objfun = @(X) objfun(X);
 constrfun = @(Y) constraint(Y, constants, xinc, yinc, xnum, ynum);
@@ -36,7 +36,7 @@ constrfun = @(Y) constraint(Y, constants, xinc, yinc, xnum, ynum);
 options = optimoptions('fmincon', 'MaxFunctionEvaluations', 60000,...
     'SpecifyObjectiveGradient',true,...
     'Display', 'iter', 'Algorithm', 'sqp',...
-    'UseParallel',true, 'HonorBounds', true, 'OutputFcn', @outfun);
+    'HonorBounds', true, 'OutputFcn', @outfun);
 
 % Run optimizer using the prescribed options
 [minconc, minenergy] = fmincon('objfun', conc,[],[],[],[],conc*0,[], constrfun, options);

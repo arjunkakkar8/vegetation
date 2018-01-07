@@ -6,8 +6,8 @@ c2 = constants(3);
 c3 = constants(4);
 c4 = constants(5);
 
-xinc = size(1)/100;
-yinc = size(2)/100;
+xinc = 10.*size(1);
+yinc = 10.*size(2);
 
 % The plant concentration at gridpoints
 u = reshape(data, size(1), size(2));
@@ -18,13 +18,13 @@ w = c2.*ones(size(1), size(2));
 p = c3.*u;
 water = cumsum(w-p, 2,'reverse');
 % Calculate the gradient sq of water availability (the root system)
-%waterp = padarray(water, [1,1], 'replicate', 'both');
-waterp = zeros(size(1)+2, size(1)+2);
-waterp(2:end-1, 2:end-1) = water;
-waterp(1,:) = waterp(2,:);
-waterp(end,:) = waterp(end-1,:);
-waterp(:,1) = waterp(:,2);
-waterp(:,end) = waterp(:,end-1);
+waterp = padarray(water, [1,1], 'replicate', 'both');
+% waterp = zeros(size(1)+2, size(1)+2);
+% waterp(2:end-1, 2:end-1) = water;
+% waterp(1,:) = waterp(2,:);
+% waterp(end,:) = waterp(end-1,:);
+% waterp(:,1) = waterp(:,2);
+% waterp(:,end) = waterp(:,end-1);
 w12 = circshift(waterp, [1,0]);
 w32 = circshift(waterp, [-1,0]);
 w21 = circshift(waterp, [0,1]);
@@ -36,11 +36,11 @@ ceq = sum(sum(abs(u.*(c0-c1.*u-water-c4.*delsqwater))));
 c = -water;
 
 % Penalty for violating equality constraint
-ceqpen = ceq.*1e5;
+ceqpen = ceq.*10;
 % Penalty for violating inequality constraint
 c = sum(sum(abs(c(c>0))));
-cpen = c.*1e7;
+cpen = c.*1e2;
 
 % Compose the final goodness value
-val = cpen+ceqpen+1/conc;
+val = cpen+ceqpen+100/(conc);
 end

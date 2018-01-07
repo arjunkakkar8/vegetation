@@ -24,7 +24,7 @@
 % History:    10.03.94     file created
 %             22.01.03     tested under MATLAB v6 by Alex Shenfield
 
-function SelCh = select(SEL_F, Chrom, FitnV, GGAP, SUBPOP);
+function SelCh = select(SEL_F, Chrom, FitnV, GGAP, SUBPOP)
 
 % Check parameter consistency
    if nargin < 3, error('Not enough input parameter'); end
@@ -36,7 +36,7 @@ function SelCh = select(SEL_F, Chrom, FitnV, GGAP, SUBPOP);
    if VarF ~= 1, error('FitnV must be a column vector'); end
   
    if nargin < 5, SUBPOP = 1; end
-   if nargin > 4,
+   if nargin > 4
       if isempty(SUBPOP), SUBPOP = 1;
       elseif isnan(SUBPOP), SUBPOP = 1;
       elseif length(SUBPOP) ~= 1, error('SUBPOP must be a scalar'); end
@@ -46,7 +46,7 @@ function SelCh = select(SEL_F, Chrom, FitnV, GGAP, SUBPOP);
    Nind = NindCh/SUBPOP;  % Compute number of individuals per subpopulation
 
    if nargin < 4, GGAP = 1; end
-   if nargin > 3,
+   if nargin > 3
       if isempty(GGAP), GGAP = 1;
       elseif isnan(GGAP), GGAP = 1;
       elseif length(GGAP) ~= 1, error('GGAP must be a scalar');
@@ -58,7 +58,7 @@ function SelCh = select(SEL_F, Chrom, FitnV, GGAP, SUBPOP);
 
 % Select individuals from population
    SelCh = [];
-   for irun = 1:SUBPOP,
+   for irun = 1:SUBPOP
       FitnVSub = FitnV((irun-1)*Nind+1:irun*Nind);
       ChrIx=feval(SEL_F, FitnVSub, NSel)+(irun-1)*Nind;
       SelCh=[SelCh; Chrom(ChrIx,:)];
