@@ -2,6 +2,7 @@ function [initial, Chrom, FieldD, SIZE] = geneticopt(initial, Chrom)
 % Use the GAToolbox by adding it to your path by specifying its exact
 % address in the Github folder.
 % addpath('/Users/arjunkakkar/Desktop/Vegetation Patterns/vegetation/genetic')
+ addpath('/Users/ak23/vegetation/genetic')
 
 % addAttachedFiles(gcp, {'geneticMSE.m'});
 SIZE = [10, 10];
@@ -11,7 +12,10 @@ NVAR=SIZE(1).*SIZE(2);% Number of variables
 GGAP=1;
 PRECI = 10;
 
-CONSTANTS = [3, 1, 1, 3, 1];
+%CONSTANTS = [10, 1, 1.5, 2, 10];
+%CONSTANTS = [3, 1, 1, 6, 5];
+
+CONSTANTS = [0.4830,0.9396,0.4747,4.0692,0.9760];
 
 FieldD = repmat([PRECI;0;1;0;0;1;1], [1,NVAR]);
 
@@ -53,8 +57,8 @@ while gen < MAXGEN
     disp(gen)
     disp(min(ObjV))
     
-    %contour(reshape(bs2rv(Chrom(1,:), FieldD), SIZE(1), SIZE(2)))
-    %drawnow
+    contour(reshape(bs2rv(Chrom(1,:), FieldD), SIZE(1), SIZE(2)))
+    drawnow
 end
 
 % Function that iterates over the MSE calculation of the population in

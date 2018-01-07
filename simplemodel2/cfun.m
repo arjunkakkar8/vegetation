@@ -1,5 +1,9 @@
-function val = geneticobj(data, size, constants)
-% Constants
+function penalty = cfun(vals)
+
+constants = vals;
+
+size = [10,10];
+
 c0 = constants(1);
 c1 = constants(2);
 c2 = constants(3);
@@ -10,7 +14,10 @@ xinc = size(1)/10;
 yinc = size(2)/10;
 
 % The plant concentration at gridpoints
-u = reshape(data, size(1), size(2));
+%u = initial;
+u = [repmat(0, [10, 1]),repmat(0.25, [10, 1]),repmat(0.1, [10, 1]),repmat(0, [10, 1]),...
+    repmat(0.25, [10, 1]),repmat(0.1, [10, 1]),repmat(0, [10, 1]),...
+    repmat(0.25, [10, 1]),repmat(0.1, [10, 1]),repmat(0, [10, 1])];
 % Total plant concentration
 conc = sum(sum(u));
 % Constraints
@@ -42,5 +49,5 @@ c = sum(sum(abs(c(c>0))));
 cpen = c.*1e3;
 
 % Compose the final goodness value
-val = cpen+ceqpen-conc;
+penalty = cpen+ceqpen-conc;
 end
